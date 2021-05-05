@@ -1,6 +1,7 @@
 package com.sudhindra.tictactoe.game
 
 import androidx.compose.ui.geometry.Offset
+import com.sudhindra.tictactoe.models.LineOffsets
 
 object WinningLines {
     // Horizontal
@@ -17,11 +18,6 @@ object WinningLines {
     const val D1 = 6
     const val D2 = 7
 }
-
-data class LineOffsets(
-    val start: Offset,
-    val end: Offset
-)
 
 // Horizontal
 fun Float.h1Line() = LineOffsets(
@@ -65,3 +61,5 @@ fun Float.d2Line() = LineOffsets(
     start = Offset(5 * this / 6, this / 6),
     end = Offset(this / 6, 5 * this / 6)
 )
+
+fun center(a: Offset, b: Offset) = Offset((a.x + b.x) / 2, (a.y + b.y) / 2)

@@ -1,7 +1,6 @@
 package com.sudhindra.tictactoe.ui.game
 
-import androidx.compose.animation.core.animateOffset
-import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -17,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +32,7 @@ import com.sudhindra.tictactoe.game.Point
 import com.sudhindra.tictactoe.game.Selection
 import com.sudhindra.tictactoe.game.SelectionListMatrix
 import com.sudhindra.tictactoe.game.WinningLines
+import com.sudhindra.tictactoe.game.center
 import com.sudhindra.tictactoe.game.d1Line
 import com.sudhindra.tictactoe.game.d2Line
 import com.sudhindra.tictactoe.game.forEachItemIndexed
@@ -41,6 +42,7 @@ import com.sudhindra.tictactoe.game.h3Line
 import com.sudhindra.tictactoe.game.v1Line
 import com.sudhindra.tictactoe.game.v2Line
 import com.sudhindra.tictactoe.game.v3Line
+import com.sudhindra.tictactoe.models.LineOffsets
 import com.sudhindra.tictactoe.models.Player
 import com.sudhindra.tictactoe.viewmodels.GameData
 import com.sudhindra.tictactoe.viewmodels.GameState
@@ -75,13 +77,19 @@ fun GameLines(
 ) {
     val lineColor = MaterialTheme.colors.secondary
 
-    var canvasCenter by remember { mutableStateOf(Offset(0f, 0f)) }
     var a by remember { mutableStateOf(0f) }
 
-    val lineTransition = updateTransition(gameState is GameState.Won, label = "lineTransition")
-    val start by lineTransition.animateOffset(label = "start") {
-        if (it) {
-            when ((gameState as GameState.Won).winningLine) {
+    val line =
+        remember {
+            Animatable(
+                LineOffsets(Offset(0f, 0f), Offset(0f, 0f)),
+                LineOffsets.VectorConverter
+            )
+        }
+
+    LaunchedEffect(gameState) {
+        if (gameState is GameState.Won) {
+            val start = when (gameState.winningLine) {
                 WinningLines.H1 -> a.h1Line().start
                 WinningLines.H2 -> a.h2Line().start
                 WinningLines.H3 -> a.h3Line().start
@@ -92,11 +100,7 @@ fun GameLines(
                 WinningLines.D2 -> a.d2Line().start
                 else -> Offset(-1f, -1f)
             }
-        } else canvasCenter
-    }
-    val end by lineTransition.animateOffset(label = "end") {
-        if (it) {
-            when ((gameState as GameState.Won).winningLine) {
+            val end = when (gameState.winningLine) {
                 WinningLines.H1 -> a.h1Line().end
                 WinningLines.H2 -> a.h2Line().end
                 WinningLines.H3 -> a.h3Line().end
@@ -107,18 +111,20 @@ fun GameLines(
                 WinningLines.D2 -> a.d2Line().end
                 else -> Offset(-1f, -1f)
             }
-        } else canvasCenter
+            val center = center(start, end)
+
+            line.snapTo(LineOffsets(center, center))
+            line.animateTo(LineOffsets(start, end))
+        }
     }
 
     Canvas(modifier) {
         a = size.width
-        canvasCenter = center
-
         if (gameState is GameState.Won)
             drawLine(
                 lineColor,
-                start = start,
-                end = end,
+                start = line.value.start,
+                end = line.value.end,
                 strokeWidth = 50f,
                 cap = StrokeCap.Round
             )
