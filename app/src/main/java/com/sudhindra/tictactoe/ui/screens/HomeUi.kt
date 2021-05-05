@@ -45,12 +45,12 @@ fun HomeUi(
             },
             onNegativeClick = viewModel::hideDialog
         )
-    HomePortraitUi(onSinglePlayerClick = viewModel::showDialog)
+    HomePortraitUi(onMultiPlayerClick = viewModel::showDialog)
 }
 
 @Composable
 fun HomePortraitUi(
-    onSinglePlayerClick: () -> Unit,
+    onMultiPlayerClick: () -> Unit,
 ) {
     Column(
         Modifier
@@ -67,8 +67,8 @@ fun HomePortraitUi(
         )
         HomeMenu(
             Modifier.fillMaxWidth(0.85f),
-            onSinglePlayerClick = onSinglePlayerClick,
-            onMultiPlayerClick = {},
+            onSinglePlayerClick = {},
+            onMultiPlayerClick = onMultiPlayerClick,
             onOnlineMultiPlayerClick = {}
         )
     }
