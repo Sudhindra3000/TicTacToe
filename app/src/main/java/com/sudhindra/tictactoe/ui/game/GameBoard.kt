@@ -31,7 +31,16 @@ import androidx.compose.ui.unit.dp
 import com.sudhindra.tictactoe.game.Point
 import com.sudhindra.tictactoe.game.Selection
 import com.sudhindra.tictactoe.game.SelectionListMatrix
+import com.sudhindra.tictactoe.game.WinningLines
+import com.sudhindra.tictactoe.game.d1Line
+import com.sudhindra.tictactoe.game.d2Line
 import com.sudhindra.tictactoe.game.forEachItemIndexed
+import com.sudhindra.tictactoe.game.h1Line
+import com.sudhindra.tictactoe.game.h2Line
+import com.sudhindra.tictactoe.game.h3Line
+import com.sudhindra.tictactoe.game.v1Line
+import com.sudhindra.tictactoe.game.v2Line
+import com.sudhindra.tictactoe.game.v3Line
 import com.sudhindra.tictactoe.models.Player
 import com.sudhindra.tictactoe.viewmodels.GameData
 import com.sudhindra.tictactoe.viewmodels.GameState
@@ -71,10 +80,34 @@ fun GameLines(
 
     val lineTransition = updateTransition(gameState is GameState.Won, label = "lineTransition")
     val start by lineTransition.animateOffset(label = "start") {
-        if (it) Offset(a / 6, a / 6) else canvasCenter
+        if (it) {
+            when ((gameState as GameState.Won).winningLine) {
+                WinningLines.H1 -> a.h1Line().start
+                WinningLines.H2 -> a.h2Line().start
+                WinningLines.H3 -> a.h3Line().start
+                WinningLines.V1 -> a.v1Line().start
+                WinningLines.V2 -> a.v2Line().start
+                WinningLines.V3 -> a.v3Line().start
+                WinningLines.D1 -> a.d1Line().start
+                WinningLines.D2 -> a.d2Line().start
+                else -> Offset(-1f, -1f)
+            }
+        } else canvasCenter
     }
     val end by lineTransition.animateOffset(label = "end") {
-        if (it) Offset((5 * a) / 6, (5 * a) / 6) else canvasCenter
+        if (it) {
+            when ((gameState as GameState.Won).winningLine) {
+                WinningLines.H1 -> a.h1Line().end
+                WinningLines.H2 -> a.h2Line().end
+                WinningLines.H3 -> a.h3Line().end
+                WinningLines.V1 -> a.v1Line().end
+                WinningLines.V2 -> a.v2Line().end
+                WinningLines.V3 -> a.v3Line().end
+                WinningLines.D1 -> a.d1Line().end
+                WinningLines.D2 -> a.d2Line().end
+                else -> Offset(-1f, -1f)
+            }
+        } else canvasCenter
     }
 
     Canvas(modifier) {
