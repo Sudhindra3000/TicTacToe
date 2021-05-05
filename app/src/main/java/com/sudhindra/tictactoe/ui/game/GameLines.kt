@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.StrokeCap
 import com.sudhindra.tictactoe.game.WinningLines
-import com.sudhindra.tictactoe.game.center
 import com.sudhindra.tictactoe.game.d1Line
 import com.sudhindra.tictactoe.game.d2Line
 import com.sudhindra.tictactoe.game.h1Line
@@ -47,32 +46,21 @@ fun GameLines(
 
     LaunchedEffect(gameState) {
         if (gameState is GameState.Won) {
-            val start = when (gameState.winningLine) {
-                WinningLines.H1 -> a.h1Line().start
-                WinningLines.H2 -> a.h2Line().start
-                WinningLines.H3 -> a.h3Line().start
-                WinningLines.V1 -> a.v1Line().start
-                WinningLines.V2 -> a.v2Line().start
-                WinningLines.V3 -> a.v3Line().start
-                WinningLines.D1 -> a.d1Line().start
-                WinningLines.D2 -> a.d2Line().start
-                else -> Offset(-1f, -1f)
+            val offsets = when (gameState.winningLine) {
+                WinningLines.H1 -> a.h1Line()
+                WinningLines.H2 -> a.h2Line()
+                WinningLines.H3 -> a.h3Line()
+                WinningLines.V1 -> a.v1Line()
+                WinningLines.V2 -> a.v2Line()
+                WinningLines.V3 -> a.v3Line()
+                WinningLines.D1 -> a.d1Line()
+                WinningLines.D2 -> a.d2Line()
+                else -> LineOffsets(Offset(-1f, -1f), Offset(-1f, -1f))
             }
-            val end = when (gameState.winningLine) {
-                WinningLines.H1 -> a.h1Line().end
-                WinningLines.H2 -> a.h2Line().end
-                WinningLines.H3 -> a.h3Line().end
-                WinningLines.V1 -> a.v1Line().end
-                WinningLines.V2 -> a.v2Line().end
-                WinningLines.V3 -> a.v3Line().end
-                WinningLines.D1 -> a.d1Line().end
-                WinningLines.D2 -> a.d2Line().end
-                else -> Offset(-1f, -1f)
-            }
-            val center = center(start, end)
+            val center = offsets.center
 
             lineOffsets.snapTo(LineOffsets(center, center))
-            lineOffsets.animateTo(LineOffsets(start, end))
+            lineOffsets.animateTo(offsets)
         }
     }
 

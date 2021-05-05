@@ -61,5 +61,3 @@ fun Float.d2Line() = LineOffsets(
     start = Offset(5 * this / 6, this / 6),
     end = Offset(this / 6, 5 * this / 6)
 )
-
-fun center(a: Offset, b: Offset) = Offset((a.x + b.x) / 2, (a.y + b.y) / 2)

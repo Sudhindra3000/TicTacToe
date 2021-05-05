@@ -8,6 +8,9 @@ data class LineOffsets(
     val start: Offset,
     val end: Offset
 ) {
+    val center: Offset
+        get() = Offset((start + end).x / 2, (start + end).y / 2)
+
     companion object {
         /**
          * A type converter that converts a LineOffsets to a AnimationVector4D, and vice versa.
