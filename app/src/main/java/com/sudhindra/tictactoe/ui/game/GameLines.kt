@@ -34,10 +34,13 @@ fun GameLines(
 
     var a by remember { mutableStateOf(0f) }
 
-    val line =
+    val lineOffsets =
         remember {
             Animatable(
-                LineOffsets(Offset(0f, 0f), Offset(0f, 0f)),
+                LineOffsets(
+                    Offset(Float.MAX_VALUE, Float.MAX_VALUE),
+                    Offset(Float.MAX_VALUE, Float.MAX_VALUE)
+                ),
                 LineOffsets.VectorConverter
             )
         }
@@ -68,8 +71,8 @@ fun GameLines(
             }
             val center = center(start, end)
 
-            line.snapTo(LineOffsets(center, center))
-            line.animateTo(LineOffsets(start, end))
+            lineOffsets.snapTo(LineOffsets(center, center))
+            lineOffsets.animateTo(LineOffsets(start, end))
         }
     }
 
@@ -78,8 +81,8 @@ fun GameLines(
         if (gameState is GameState.Won)
             drawLine(
                 lineColor,
-                start = line.value.start,
-                end = line.value.end,
+                start = lineOffsets.value.start,
+                end = lineOffsets.value.end,
                 strokeWidth = 50f,
                 cap = StrokeCap.Round
             )
