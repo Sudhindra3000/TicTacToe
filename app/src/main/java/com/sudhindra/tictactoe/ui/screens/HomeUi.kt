@@ -19,8 +19,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.navigate
-import androidx.navigation.compose.popUpTo
 import com.sudhindra.tictactoe.ui.dialogs.MultiplayerNamesDialog
 import com.sudhindra.tictactoe.viewmodels.HomeViewModel
 
