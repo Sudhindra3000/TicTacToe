@@ -31,10 +31,8 @@ import com.sudhindra.tictactoe.viewmodels.factories.GameViewModelFactory
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun GameUi(
-    player1: String,
-    player2: String
-) {
+fun GameUi(players: Pair<String, String>) {
+    val (player1, player2) = players
     val viewModel: GameViewModel = viewModel(factory = GameViewModelFactory(player1, player2))
     val gameData by viewModel.gameData.collectAsState()
     val gameState by viewModel.gameState.collectAsState()
@@ -99,11 +97,19 @@ fun GameBottomButtons(
     onEndGameClick: () -> Unit
 ) {
     Row(modifier) {
-        Button(onClick = onPlayAgainClick, shape = CircleShape, contentPadding = PaddingValues(vertical = 12.dp, horizontal = 20.dp)) {
+        Button(
+            onClick = onPlayAgainClick,
+            shape = CircleShape,
+            contentPadding = PaddingValues(vertical = 12.dp, horizontal = 20.dp)
+        ) {
             Text(text = "PLAY AGAIN", style = MaterialTheme.typography.h6)
         }
         Spacer(Modifier.size(20.dp))
-        Button(onClick = onEndGameClick, shape = CircleShape, contentPadding = PaddingValues(vertical = 12.dp, horizontal = 20.dp)) {
+        Button(
+            onClick = onEndGameClick,
+            shape = CircleShape,
+            contentPadding = PaddingValues(vertical = 12.dp, horizontal = 20.dp)
+        ) {
             Text(text = "END GAME", style = MaterialTheme.typography.h6)
         }
     }

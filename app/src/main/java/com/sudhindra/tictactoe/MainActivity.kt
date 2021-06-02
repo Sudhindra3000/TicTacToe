@@ -20,8 +20,8 @@ class MainActivity : ComponentActivity() {
                     composable("home") { HomeUi(navController = navController) }
                     composable("game/{player1}/{player2}") { backStackEntry ->
                         GameUi(
-                            player1 = backStackEntry.arguments?.getString("player1")!!,
-                            player2 = backStackEntry.arguments?.getString("player2")!!
+                            players = backStackEntry.arguments?.getString("player1")!!
+                                to backStackEntry.arguments?.getString("player2")!!
                         )
                     }
                 }
