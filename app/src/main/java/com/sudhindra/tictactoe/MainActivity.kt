@@ -3,6 +3,7 @@ package com.sudhindra.tictactoe
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.Text
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -21,8 +22,12 @@ class MainActivity : ComponentActivity() {
                     composable("game/{player1}/{player2}") { backStackEntry ->
                         GameUi(
                             players = backStackEntry.arguments?.getString("player1")!!
-                                to backStackEntry.arguments?.getString("player2")!!
+                                to backStackEntry.arguments?.getString("player2")!!,
+                            navController = navController
                         )
+                    }
+                    composable("results") { backStackEntry ->
+                        Text(text = "Results")
                     }
                 }
             }

@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.sudhindra.tictactoe.ui.game.GameBoard
 import com.sudhindra.tictactoe.ui.game.PlayersScreen
 import com.sudhindra.tictactoe.ui.utils.isPortrait
@@ -31,7 +32,10 @@ import com.sudhindra.tictactoe.viewmodels.factories.GameViewModelFactory
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun GameUi(players: Pair<String, String>) {
+fun GameUi(
+    players: Pair<String, String>,
+    navController: NavHostController
+) {
     val (player1, player2) = players
     val viewModel: GameViewModel = viewModel(factory = GameViewModelFactory(player1, player2))
     val gameData by viewModel.gameData.collectAsState()
@@ -84,8 +88,12 @@ fun GameUi(players: Pair<String, String>) {
         if (gameState !is GameState.Playing)
             GameBottomButtons(
                 Modifier.layoutId("bottomButtons"),
-                onPlayAgainClick = {},
-                onEndGameClick = {}
+                onPlayAgainClick = viewModel::playAgain,
+                onEndGameClick = {
+                    navController.navigate("results") {
+                        popUpTo("game") { inclusive = true }
+                    }
+                }
             )
     }
 }

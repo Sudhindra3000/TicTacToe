@@ -63,6 +63,11 @@ class GameViewModel(
             }
         )
     }
+
+    fun playAgain() {
+        // _gameState.value = GameState.Playing
+        // _gameData.value = _gameData.value.copy(currentPlayerIndex = 0)
+    }
 }
 
 sealed class GameState {
