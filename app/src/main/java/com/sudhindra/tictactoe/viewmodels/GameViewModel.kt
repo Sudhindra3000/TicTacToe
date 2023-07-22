@@ -8,6 +8,7 @@ import com.sudhindra.tictactoe.game.SelectionListMatrix
 import com.sudhindra.tictactoe.game.to2DList
 import com.sudhindra.tictactoe.models.Player
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class GameViewModel(
@@ -18,13 +19,17 @@ class GameViewModel(
     private val _gameState: MutableStateFlow<GameState> = MutableStateFlow(GameState.Playing)
     val gameState = _gameState.asStateFlow()
 
+    private val gameEngine: GameEngine = GameEngine(
+        onPointsChange = { _gameData.value = _gameData.value.copy(points = it.to2DList()) }
+    )
+
     private val _gameData = MutableStateFlow(
         GameData(
             points = GameEngine.defaultPositions.to2DList(),
             currentPlayerIndex = 0
         )
     )
-    val gameData = _gameData.asStateFlow()
+    val gameData:StateFlow<GameData> = _gameData
 
     val players = listOf(
         Player(
@@ -40,10 +45,6 @@ class GameViewModel(
     )
     private val currentPlayer: Player
         get() = players[gameData.value.currentPlayerIndex]
-
-    private val gameEngine: GameEngine = GameEngine(
-        onPointsChange = { _gameData.value = _gameData.value.copy(points = it.to2DList()) }
-    )
 
     fun select(point: Point) {
         gameEngine.select(point, currentPlayer.id)
@@ -62,6 +63,14 @@ class GameViewModel(
                 else -> 0
             }
         )
+    }
+
+    fun playAgain() {
+        _gameState.value = GameState.Playing
+        _gameData.value = _gameData.value.copy(
+            currentPlayerIndex = 0
+        )
+        gameEngine.resetBoard()
     }
 }
 

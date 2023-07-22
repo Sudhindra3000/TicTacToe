@@ -72,6 +72,7 @@ fun GameCell(
         contentAlignment = Alignment.Center
     ) {
         if (selection is Selection.Selected) {
+            println("Piece")
             val piece = players.find { it.id == selection.user }!!.piece
             Text(text = "$piece", style = MaterialTheme.typography.h3, color = Color.White)
         }

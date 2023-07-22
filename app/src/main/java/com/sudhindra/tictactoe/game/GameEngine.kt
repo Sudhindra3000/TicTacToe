@@ -4,6 +4,7 @@ typealias SelectionArrayMatrix = Array<Array<Selection>>
 typealias SelectionListMatrix = List<List<Selection>>
 
 class GameEngine(private val onPointsChange: (SelectionArrayMatrix) -> Unit) {
+
     private var positions: SelectionArrayMatrix = defaultPositions
 
     fun select(point: Point, user: String) {
@@ -33,6 +34,10 @@ class GameEngine(private val onPointsChange: (SelectionArrayMatrix) -> Unit) {
             else if (line == "$user2$user2$user2") return Pair(user2, i)
         }
         return null
+    }
+
+    fun resetBoard() {
+        positions = defaultPositions
     }
 
     companion object {
